@@ -13,7 +13,7 @@ Automatically classify and sort your photos into folders using CLIP — no cloud
 - 🔒 **100% local** — your photos never leave your machine
 - ⚡ **GPU accelerated** — uses CUDA for fast inference
 - 📂 **8 categories** — people, documents, memes, screenshots, animals, landscapes, food, other
-- 🔁 **Resume support** — retry scripts skip already processed files
+- 🔁 **Resume support** — skips already processed files automatically
 - 🗑️ **Duplicate removal** — finds and removes dupes by file hash, not just filename
 - 🖼️ **HEIC support** — handles iPhone photos natively
 
@@ -46,7 +46,7 @@ Automatically classify and sort your photos into folders using CLIP — no cloud
 
 **1. Clone the repo**
 ```bash
-git clone https://github.com/yourusername/local-photo-sorter
+git clone https://github.com/danarieel/local-photo-sorter
 cd local-photo-sorter
 ```
 
@@ -64,30 +64,31 @@ pip install open-clip-torch pillow-heif Pillow tqdm
 
 ## 📖 Usage
 
-### Step 1 — Sort your photos
 ```bash
-python sort_photos_clip_large.py --input "C:/Photos" --output "C:/Sorted"
+python main.py
 ```
-Copies photos from `--input` into categorized subfolders in `--output`. Originals are untouched.
+
+An interactive menu will appear:
+
+```
+========================================
+   Local AI Photo Sorter
+   CLIP ViT-L/14 | fully local
+========================================
+
+  1. Sort photos
+  2. Find missing files
+  3. Remove duplicates
+  0. Exit
+```
+
+**1. Sort photos** — classifies all photos from input folder and copies them into categorized subfolders. Originals are untouched.
 
 ~6 photos/sec on RTX 2060 Super. 5000 photos ≈ 15 minutes.
 
----
+**2. Find missing files** — if some files failed on the first run, this option finds and processes them.
 
-### Step 2 — Fix any failed files (optional)
-If some files failed (e.g. HEIC not supported), run:
-```bash
-python find_missing.py --input "C:/Photos" --output "C:/Sorted"
-```
-Finds files that didn't make it into the output and processes them.
-
----
-
-### Step 3 — Remove duplicates (optional)
-```bash
-python remove_dupes.py --folder "C:/Sorted"
-```
-Finds exact duplicates by MD5 hash, shows you what it found, then asks for confirmation before deleting anything.
+**3. Remove duplicates** — finds exact duplicates by MD5 hash, shows what it found, then asks for confirmation before deleting anything.
 
 ---
 
@@ -109,11 +110,9 @@ Photos are processed in batches of 16 for maximum GPU throughput.
 
 ```
 local-photo-sorter/
-├── sort_photos_clip_large.py   # Main classifier
-├── find_missing.py             # Retry failed files
-├── remove_dupes.py             # Remove duplicate files
-├── requirements.txt
-└── README.md
+├── main.py       # classifier, missing file finder, duplicate remover
+├── README.md
+└── LICENSE
 ```
 
 ---
